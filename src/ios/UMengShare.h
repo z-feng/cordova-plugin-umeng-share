@@ -16,4 +16,5 @@
 @interface UMengShare : CDVPlugin<UMSocialShareMenuViewDelegate>
  - (void)init:(CDVInvokedUrlCommand*)command;
  - (void)share:(CDVInvokedUrlCommand*)command;
+ - (void)directShare:(CDVInvokedUrlCommand*)command;
 @end

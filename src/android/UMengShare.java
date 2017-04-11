@@ -32,9 +32,11 @@ public class UMengShare extends CordovaPlugin{
     @Override
     public boolean execute(String action,JSONArray args,CallbackContext callbackContext) throws JSONException{
         if(action.equals("init")){
-            init(args,callbackContext);
-        }else if(action.equals("share")){
-            share(args,callbackContext);
+            init(args, callbackContext);
+        } else if (action.equals("share")){
+            share(args, callbackContext);
+        } else if(action.equals("directShare")){
+            directShare(args, callbackContext);
         }
         return false;
     }
@@ -78,18 +80,44 @@ public class UMengShare extends CordovaPlugin{
         });
     }
 
+    private void directShare(final JSONArray args,final CallbackContext callbackContext){
+
+        cordova.getActivity().runOnUiThread(new Runnable(){
+            @Override
+            public void run(){
+                String platform = args.optString(0);
+                String text = args.optString(1);
+                String title = args.optString(2);
+                String url = args.optString(3);
+                String imgUrl = args.optString(4);
+
+                SHARE_MEDIA share_media = SHARE_MEDIA.valueOf(platform);
+
+                if(!checkPlatformInstall(share_media)){
+                    callbackContext.error("没有安装应用");
+                    return;
+                }
+
+                ShareAction action =  new ShareAction(cordova.getActivity());
+                UMWeb umWeb = new UMWeb(url);
+                umWeb.setTitle(title);
+                umWeb.setThumb(new UMImage(cordova.getActivity(), imgUrl));
+                action.withText(text)
+                        .setPlatform(share_media)
+                        .withMedia(umWeb)
+                        .setCallback(getListener())
+                        .share();
+                callbackContext.success();
+            }
+        });
+    }
+
     private UMShareListener getListener() {
         final UMShareListener umShareListener = new UMShareListener() {
             @Override
             public void onStart(SHARE_MEDIA platform) {
                 //分享开始的回调
-                UMShareAPI umShareAPI = UMShareAPI.get(cordova.getActivity().getApplicationContext());
-                if (!umShareAPI.isInstall(cordova.getActivity(), platform)) {
-                    Toast toaster = Toast.makeText(cordova.getActivity(), "没有安装应用", Toast.LENGTH_SHORT);
-                    toaster.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-                    toaster.show();
-                }
-
+                checkPlatformInstall(platform);
             }
             @Override
             public void onResult(SHARE_MEDIA platform) {
@@ -116,5 +144,16 @@ public class UMengShare extends CordovaPlugin{
             }
         };
         return umShareListener;
+    }
+
+    private boolean checkPlatformInstall(SHARE_MEDIA platform) {
+        UMShareAPI umShareAPI = UMShareAPI.get(cordova.getActivity().getApplicationContext());
+        if (!umShareAPI.isInstall(cordova.getActivity(), platform)) {
+            Toast toaster = Toast.makeText(cordova.getActivity(), "没有安装应用", Toast.LENGTH_SHORT);
+            toaster.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+            toaster.show();
+            return false;
+        }
+        return true;
     }
 }

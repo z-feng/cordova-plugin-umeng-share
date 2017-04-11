@@ -5,24 +5,24 @@ cordova友盟分享插件，暂时只支持分享到微信、QQ以及微博，�
 基于友盟最新SDK v6.4.3(2017-04-05)
 
 
-# 支持平台
+## 支持平台
 
- - Android 
+ - Android
  - IOS
 
-# 安装
+## 安装
 
-## 1. 克隆代码
+### 1. 克隆代码
 
 ```
 git clone https://github.com/z-feng/cordova-plugin-umeng-share.git
 ```
 
-## 2. 修改各平台配置
+### 2. 修改各平台配置
 
 打开根目录下的 `plugin.xml` 文件
 
-- ###  （i）修改友盟 `API_KEY`
+- ####  （i）修改友盟 `API_KEY`
 找到
 ```
 <meta-data android:name="UMENG_APPKEY" android:value="API_KEY"/>
@@ -30,7 +30,7 @@ git clone https://github.com/z-feng/cordova-plugin-umeng-share.git
 将 `API_KEY` 为友盟平台申请的 `API_KEY`；
 
 
-- ### （ii）修改微信配置
+- ####（ii）修改微信配置
 找到，
 
 ```
@@ -45,7 +45,7 @@ git clone https://github.com/z-feng/cordova-plugin-umeng-share.git
 ```
 将 `wxd9a39c7122aa6516` 修改为 `wx` + 微信应用 `appId`；
 
-- ### （iii）修改QQ平台配置
+- #### （iii）修改QQ平台配置
 找到，
 
 ```
@@ -74,7 +74,7 @@ git clone https://github.com/z-feng/cordova-plugin-umeng-share.git
 ```
 将 `tencent1105821097` 修改为 `tencent1105821097` + 腾讯QQ互联应用 `appId`；
 
-- ### （IV）修改微博配置
+- #### （IV）修改微博配置
 找到，
 
 ```
@@ -93,15 +93,15 @@ git clone https://github.com/z-feng/cordova-plugin-umeng-share.git
 
 
 
-## 3. 安装
+### 3. 安装
 ```
 cordova plugin add ${path}/cordova-plugin-umeng-share
 ```
 其中，`path` 为插件所在路径。
 
-# 使用
+## 使用
 
-## 初始化
+### 初始化
 
 可在 `$ionicPlatform.ready` 函数中执行 `init`，只需要执行一次。
 ```
@@ -110,7 +110,7 @@ UMengShare.init(function () {
 });
 ```
 
-## 分享
+### 分享
 
 在需要的地方，直接调用
 ```
@@ -122,6 +122,6 @@ UMengShare.share('内容','标题','http://www.baidu.com',’https://wwww.exampl
 
 ```
 
-## 注意事项
+### 注意事项
 
 由于苹果ATS限制，如需使用网络图片，确保URL为HTTPS图片链接，以便于`U-Share SDK` 下载并进行分享，否则会分享失败。
